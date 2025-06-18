@@ -12,7 +12,11 @@ export default defineEventHandler(async (event) => {
         database: 'csv_project',
     });
 
-    const tableName = `upload_${Date.now()}`;
+    const dateYear = new Date().getFullYear();
+    const dateMonth = new Date().getMonth() + 1;
+    const dateDay = new Date().getDate();
+
+    const tableName = `upload_${dateYear}-${dateMonth}-${dateDay}|${Date.now()}`;
 
     await connection.execute(
         `CREATE TABLE\`${tableName}\` (
@@ -38,21 +42,4 @@ export default defineEventHandler(async (event) => {
             row.status
         ]);
     }
-
-    // await connection.execute(
-    //     `CREATE TABLE\`${tableName}_2\` (
-    //     id INT PRIMARY KEY,
-    //     name VARCHAR(50),
-    //     date DATE,
-    //     value1 FLOAT,
-    //     value2 FLOAT,
-    //     status ENUM('active', 'inactive', 'pending'))`
-    // );
-
-    // for (const row of data2) {
-    //     await connection.execute( 
-    //         `INSERT INTO \`${tableName}_2\` (id, name, date, value1, value2, status) VALUES (?, ?, ?, ?, ?, ?)`,
-    //         [row.id, row.name, row.date, row.value1, row.value2, row.status]
-    //     );
-    // }
 });

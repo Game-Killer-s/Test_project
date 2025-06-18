@@ -27,13 +27,44 @@
 
 import Papa from 'papaparse';
 
+interface emptyObject {
+  id?: string;
+  name?: string;
+  date?: string;
+  value1?: string;
+  value2?: string;
+  status?: string;
+}
+
 let fileName ='';
 let secondFileName = '';
-let GlResult = Papa.ParseResult;
-let GlSecondResult = Papa.ParseResult;
+let GlResult : Papa.ParseResult<emptyObject> ={
+  data: [],
+  errors: [],
+  meta: {
+    cursor: 0,
+    aborted: false,
+    delimiter: ',',
+    fields: [],
+    linebreak: '\n',
+    truncated: false,
+  },
+};
+let GlSecondResult : Papa.ParseResult<emptyObject> ={
+  data: [],
+  errors: [],
+  meta: {
+    cursor: 0,
+    aborted: false,
+    delimiter: ',',
+    fields: [],
+    linebreak: '\n',
+    truncated: false,
+  },
+};
 
 function fileReader(file: File, event: Event) {
-  Papa.parse(file,{
+  Papa.parse<emptyObject>(file,{
     header: true,
     skipEmptyLines: true,
     complete: (results) => {
