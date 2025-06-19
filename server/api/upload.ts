@@ -42,4 +42,6 @@ export default defineEventHandler(async (event) => {
             row.status
         ]);
     }
+    await connection.end();
+    return;
 });

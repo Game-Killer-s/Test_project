@@ -26,3 +26,14 @@ p{
 input{
     color: rgb(230, 0, 0);
 }
+
+table{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th{
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}   

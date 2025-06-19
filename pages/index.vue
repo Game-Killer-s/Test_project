@@ -4,7 +4,7 @@
   <div>
     <NuxtLayout>
       <NuxtPage />
-      <NuxtLink to="/">Home</NuxtLink>
+      <NuxtLink to="/">Upload File</NuxtLink>
       <NuxtLink to="/uploadInfo">Data Upload Overview</NuxtLink>
     </NuxtLayout>
   </div>
@@ -20,6 +20,9 @@
       <br />
       <button type="submit">Upload</button>
     </form>
+    <button @click="runMock">Mock</button>
+    <p v-if="loading">Loading...</p>
+    <p v-if="showMessage && result">{{ result.message }}</p>
   </div>
 </template>
 
@@ -87,7 +90,7 @@ function fileReader(file: File, event: Event) {
         return false;
       }
 
-      console.log('Parsed data:', results.data);
+      // console.log('Parsed data:', results.data);
       if (/[A]/.test(file.name)){
         GlResult = results;
       }else{
@@ -128,10 +131,10 @@ function handleFormSubmit() {
     alert('Files must be different. Please select two different files.');
     return;
   }
-  console.log('First result',GlResult);
-  console.log('Second result',GlSecondResult);
-  console.log('id from first file:', GlResult.data.map((row: any) => row.id));
-  console.log('id from second file:', GlSecondResult.data.map((row: any) => row.id));
+  // console.log('First result',GlResult);
+  // console.log('Second result',GlSecondResult);
+  // console.log('id from first file:', GlResult.data.map((row: any) => row.id));
+  // console.log('id from second file:', GlSecondResult.data.map((row: any) => row.id));
 
   if (IdCheck() === false) {
     return;
@@ -189,6 +192,31 @@ function IdCheck(){
     console.error('ID mismatch found between the two files.');
     alert('ID mismatch found. Please check your files.');
     return false;
+  }
+}
+
+const result = ref<{ message: string } | null>(null)
+const loading = ref(false)
+const showMessage = ref(false)
+
+async function runMock() {
+  if (loading.value) {
+    console.warn('Mock is already running');
+    return;
+  }
+  loading.value = true;
+  try{
+    result.value = await $fetch('/api/mock')
+  }
+  catch (error) {
+    console.error('Error running mock:', error);
+  }finally{
+    console.log('Mock run completed');
+    loading.value = false;
+    showMessage.value = true;
+    setTimeout(() => {
+      showMessage.value = false;
+    }, 5000);
   }
 }
 
